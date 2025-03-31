@@ -49,6 +49,7 @@ export default function RootLayout({
 
                   {/* Desktop Nav */}
                   <div className="hidden md:flex items-center gap-6 text-sm">
+                    <ThemeSwitcher />
                     <Link href="/dashboard" className="hover:underline">
                       Dashboard
                     </Link>
@@ -56,7 +57,6 @@ export default function RootLayout({
                       Leads
                     </Link>
                     {hasEnvVars && <HeaderAuth />}
-                    <ThemeSwitcher />
                   </div>
 
                   {/* Mobile Menu (simple versión collapsible opcional) */}
