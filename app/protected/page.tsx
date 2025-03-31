@@ -1,38 +1,42 @@
-import FetchDataSteps from "@/components/tutorial/fetch-data-steps";
-import { createClient } from "@/utils/supabase/server";
-import { InfoIcon } from "lucide-react";
-import { redirect } from "next/navigation";
+"use client";
 
-export default async function ProtectedPage() {
-  const supabase = await createClient();
+import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default function ProtectedPage() {
+  const supabase = createClient();
+  const [leads, setLeads] = useState<any[]>([]);
 
-  if (!user) {
-    return redirect("/sign-in");
-  }
+  const fetchLeads = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from("leads")
+      .select()
+      .eq("user_id", user.id);
+
+    if (!error && data) setLeads(data);
+  };
+
+  useEffect(() => {
+    fetchLeads();
+  }, []);
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
-      <div className="w-full">
-        <div className="bg-accent text-sm p-3 px-5 rounded-md text-foreground flex gap-3 items-center">
-          <InfoIcon size="16" strokeWidth={2} />
-          This is a protected page that you can only see as an authenticated
-          user
-        </div>
-      </div>
-      <div className="flex flex-col gap-2 items-start">
-        <h2 className="font-bold text-2xl mb-4">Your user details</h2>
-        <pre className="text-xs font-mono p-3 rounded border max-h-32 overflow-auto">
-          {JSON.stringify(user, null, 2)}
-        </pre>
-      </div>
-      <div>
-        <h2 className="font-bold text-2xl mb-4">Next steps</h2>
-        <FetchDataSteps />
-      </div>
+    <div className="space-y-10">
+      <h1 className="text-3xl font-bold">
+        👋 Bienvenido a tu panel de análisis
+      </h1>
+
+      <p className="text-gray-500">
+        Aquí puedes ver todos tus leads y sus puntuaciones generadas por IA.
+      </p>
+
+      {/* Aquí podrías reusar el dashboard con KPIs, tabla, cards, etc */}
     </div>
   );
 }
