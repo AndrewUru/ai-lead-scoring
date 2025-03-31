@@ -31,7 +31,7 @@ export default function Header() {
           Ir al Panel
         </Link>
         <a
-          href="https://github.com/tuusuario/ai-lead-scoring"
+          href="https://github.com/andrewuru/ai-lead-scoring"
           target="_blank"
           rel="noopener noreferrer"
           className="border px-6 py-2 rounded-md hover:bg-muted transition"

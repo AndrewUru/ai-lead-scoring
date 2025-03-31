@@ -73,27 +73,31 @@ export default function RootLayout({
                 {children}
               </div>
 
-              {/* Footer */}
-              <footer className="w-full border-t text-center text-xs py-10 flex flex-col items-center gap-3">
-                <p>
-                  Desarrollado con ❤️ usando{" "}
+              {/* Footer moderno */}
+              <footer className="w-full border-t py-10 flex flex-col items-center gap-3 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <span>Desarrollado con ❤️ por Andrés Tobío usando</span>
                   <a
                     href="https://supabase.com/"
                     target="_blank"
                     rel="noreferrer"
-                    className="underline hover:text-primary"
+                    className="font-medium text-primary hover:underline"
                   >
                     Supabase
-                  </a>{" "}
-                  y{" "}
+                  </a>
+                  <span>y</span>
                   <a
                     href="https://nextjs.org/"
                     target="_blank"
                     rel="noreferrer"
-                    className="underline hover:text-primary"
+                    className="font-medium text-primary hover:underline"
                   >
                     Next.js
                   </a>
+                </div>
+                <p className="text-xs">
+                  © {new Date().getFullYear()} AI Lead Scoring. Todos los
+                  derechos reservados.
                 </p>
                 <ThemeSwitcher />
               </footer>
