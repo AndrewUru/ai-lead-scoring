@@ -55,6 +55,71 @@ export default function DashboardPage() {
         <UploadForm onLeadAdded={fetchLeads} />
       </div>
 
+      {/* Lista de leads actualizada */}
+      <div>
+        <h2 className="text-xl font-semibold mt-6">Leads registrados</h2>
+        {leads.length === 0 && <p>No hay leads aún.</p>}
+        <ul className="mt-4 space-y-4">
+          {leads.map((lead) => (
+            <li key={lead.id} className="border p-4 rounded shadow-sm">
+              <p>
+                <strong>Nombre:</strong> {lead.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {lead.email}
+              </p>
+              <p>
+                <strong>Teléfono:</strong> {lead.phone}
+              </p>
+              <p>
+                <strong>Estado:</strong> {lead.status}
+              </p>
+              <p>
+                <strong>Industria:</strong> {lead.industry}
+              </p>
+              <p>
+                <strong>Tamaño empresa:</strong> {lead.company_size}
+              </p>
+              <p>
+                <strong>Cargo:</strong> {lead.job_title}
+              </p>
+              <p>
+                <strong>Ubicación:</strong> {lead.location}
+              </p>
+              <p>
+                <strong>Fuente:</strong> {lead.source_platform}
+              </p>
+              <p>
+                <strong>Score:</strong> {lead.score ?? "—"}
+              </p>
+              {lead.utm_source && (
+                <p>
+                  <strong>UTM Source:</strong> {lead.utm_source}
+                </p>
+              )}
+              {lead.utm_medium && (
+                <p>
+                  <strong>UTM Medium:</strong> {lead.utm_medium}
+                </p>
+              )}
+              {lead.utm_campaign && (
+                <p>
+                  <strong>UTM Campaign:</strong> {lead.utm_campaign}
+                </p>
+              )}
+              {lead.gclid && (
+                <p>
+                  <strong>GCLID:</strong> {lead.gclid}
+                </p>
+              )}
+              <p className="text-xs text-gray-500">
+                {new Date(lead.created_at).toLocaleString()}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {/* Tabla de leads recientes */}
       <div>
         <h2 className="text-xl font-semibold mb-4">Últimos Leads</h2>
@@ -64,6 +129,9 @@ export default function DashboardPage() {
               <tr>
                 <th className="p-3">Nombre</th>
                 <th className="p-3">Email</th>
+                <th className="p-3">Teléfono</th>
+                <th className="p-3">Industria</th>
+                <th className="p-3">Cargo</th>
                 <th className="p-3">Estado</th>
                 <th className="p-3">Score</th>
                 <th className="p-3">Fecha</th>
@@ -74,6 +142,9 @@ export default function DashboardPage() {
                 <tr key={lead.id} className="border-b">
                   <td className="p-3">{lead.name}</td>
                   <td className="p-3">{lead.email}</td>
+                  <td className="p-3">{lead.phone}</td>
+                  <td className="p-3">{lead.industry}</td>
+                  <td className="p-3">{lead.job_title}</td>
                   <td className="p-3 capitalize">{lead.status}</td>
                   <td className="p-3">{lead.score ?? "—"}</td>
                   <td className="p-3 text-xs text-gray-500">

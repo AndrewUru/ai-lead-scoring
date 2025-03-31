@@ -36,13 +36,13 @@ export default function Page() {
       {/* Formulario para agregar leads */}
       <UploadForm onLeadAdded={fetchLeads} />
 
-      {/* Lista de leads */}
+      {/* Lista de leads actualizada */}
       <div>
         <h2 className="text-xl font-semibold mt-6">Leads registrados</h2>
         {leads.length === 0 && <p>No hay leads aún.</p>}
-        <ul className="mt-4 space-y-2">
+        <ul className="mt-4 space-y-4">
           {leads.map((lead) => (
-            <li key={lead.id} className="border p-3 rounded">
+            <li key={lead.id} className="border p-4 rounded shadow-sm">
               <p>
                 <strong>Nombre:</strong> {lead.name}
               </p>
@@ -52,6 +52,47 @@ export default function Page() {
               <p>
                 <strong>Teléfono:</strong> {lead.phone}
               </p>
+              <p>
+                <strong>Estado:</strong> {lead.status}
+              </p>
+              <p>
+                <strong>Industria:</strong> {lead.industry}
+              </p>
+              <p>
+                <strong>Tamaño empresa:</strong> {lead.company_size}
+              </p>
+              <p>
+                <strong>Cargo:</strong> {lead.job_title}
+              </p>
+              <p>
+                <strong>Ubicación:</strong> {lead.location}
+              </p>
+              <p>
+                <strong>Fuente:</strong> {lead.source_platform}
+              </p>
+              <p>
+                <strong>Score:</strong> {lead.score ?? "—"}
+              </p>
+              {lead.utm_source && (
+                <p>
+                  <strong>UTM Source:</strong> {lead.utm_source}
+                </p>
+              )}
+              {lead.utm_medium && (
+                <p>
+                  <strong>UTM Medium:</strong> {lead.utm_medium}
+                </p>
+              )}
+              {lead.utm_campaign && (
+                <p>
+                  <strong>UTM Campaign:</strong> {lead.utm_campaign}
+                </p>
+              )}
+              {lead.gclid && (
+                <p>
+                  <strong>GCLID:</strong> {lead.gclid}
+                </p>
+              )}
               <p className="text-xs text-gray-500">
                 {new Date(lead.created_at).toLocaleString()}
               </p>
