@@ -1,44 +1,38 @@
-import { signInAction } from "@/app/actions";
-import { FormMessage, Message } from "@/components/form-message";
-import { SubmitButton } from "@/components/submit-button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
+// app/sign-in/page.tsx
+"use client";
 
-export default async function Login(props: { searchParams: Promise<Message> }) {
-  const searchParams = await props.searchParams;
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { createClient } from "@/utils/supabase/client";
+
+export default function LoginForm() {
+  const router = useRouter();
+  const supabase = createClient();
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const email = (e.currentTarget as any).email.value;
+    const password = (e.currentTarget as any).password.value;
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setError(error.message);
+    } else {
+      router.push("/protected");
+    }
+  };
+
   return (
-    <form className="flex-1 flex flex-col min-w-64">
-      <h1 className="text-2xl font-medium">Iniciar Sesión</h1>
-      <p className="text-sm text-foreground">
-        No tienes una cuenta?{" "}
-        <Link className="text-foreground font-medium underline" href="/sign-up">
-          Registrarse
-        </Link>
-      </p>
-      <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-        <Label htmlFor="email">Email</Label>
-        <Input name="email" placeholder="you@example.com" required />
-        <div className="flex justify-between items-center">
-          <Label htmlFor="password">Password</Label>
-          <Link
-            className="text-xs text-foreground underline"
-            href="/forgot-password"
-          >
-            Forgot Password?
-          </Link>
-        </div>
-        <Input
-          type="password"
-          name="password"
-          placeholder="Your password"
-          required
-        />
-        <SubmitButton pendingText="Signing In..." formAction={signInAction}>
-          Sign in
-        </SubmitButton>
-        <FormMessage message={searchParams} />
-      </div>
+    <form onSubmit={handleSubmit}>
+      <input name="email" placeholder="Email" />
+      <input type="password" name="password" placeholder="Password" />
+      <button type="submit">Iniciar sesión</button>
+      {error && <p className="text-red-500">{error}</p>}
     </form>
   );
 }
