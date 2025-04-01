@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/client";
 import UploadForm from "@/app/leads/upload-form"; // Update the path to the correct location
 
 export default function DashboardPage() {
-  const supabase = createClient();
+  const supabase = createClient(); // ✅ Correcto
   const [leads, setLeads] = useState<any[]>([]);
 
   const fetchLeads = async () => {

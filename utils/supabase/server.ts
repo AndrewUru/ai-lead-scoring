@@ -1,28 +1,27 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export const createClient = async () => {
-  const cookieStore = await cookies();
+export const createClient = () => {
+  const cookieStore = cookies(); // SIN await
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
+        get(name) {
+          return cookieStore.get(name)?.value;
+        },
         getAll() {
-          return cookieStore.getAll();
+          return Array.from(cookieStore.getAll()).map(({ name, value }) => ({
+            name,
+            value,
+          }));
         },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, options);
-            });
-          } catch (error) {
-            // The `set` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
+        set() {
+          // Ignorado por Server Components (lo maneja Supabase desde middleware)
         },
+        delete() {},
       },
     }
   );
