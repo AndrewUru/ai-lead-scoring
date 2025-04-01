@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { supabase } from "@/utils/supabase/client"; // con llaves
+import { createClient } from "@/utils/supabase/client";
+const supabase = createClient();
 
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 
