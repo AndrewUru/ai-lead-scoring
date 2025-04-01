@@ -1,65 +1,45 @@
-// components/header-auth-client.tsx
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
 import { createClient } from "@/utils/supabase/client";
-const supabase = createClient();
-
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function HeaderAuthClient() {
-  const [user, setUser] = useState<any>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const supabase = createClient();
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      setUser(data.user);
+    const fetchSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setEmail(data.session?.user.email ?? null);
     };
 
-    getUser();
+    fetchSession();
   }, []);
 
-  if (!hasEnvVars) {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/sign-in";
+  };
+
+  if (!email) {
     return (
-      <div className="flex gap-4 items-center">
-        <Badge variant="default" className="font-normal pointer-events-none">
-          Please update .env.local file with anon key and url
-        </Badge>
-        <div className="flex gap-2">
-          <Button asChild size="sm" variant="outline" disabled>
-            <Link href="/sign-in">Iniciar Sesión</Link>
-          </Button>
-          <Button asChild size="sm" variant="default" disabled>
-            <Link href="/sign-up">Registrarse</Link>
-          </Button>
-        </div>
-      </div>
+      <>
+        <Link href="/sign-in">Iniciar Sesión</Link>
+        <Link href="/sign-up">
+          <Button variant="default">Registrarse</Button>
+        </Link>
+      </>
     );
   }
 
-  return user ? (
-    <div className="flex items-center gap-4">
-      Hola, {user.email}
-      {/* En cliente no usamos form con action */}
-      <Button
-        onClick={() => supabase.auth.signOut()}
-        size="sm"
-        variant="outline"
-      >
-        Cerrar Sesión
+  return (
+    <>
+      <span className="text-sm text-muted-foreground">{email}</span>
+      <Button variant="default" onClick={handleLogout}>
+        Logout
       </Button>
-    </div>
-  ) : (
-    <div className="flex gap-2">
-      <Button asChild size="sm" variant="outline">
-        <Link href="/sign-in">Iniciar Sesión</Link>
-      </Button>
-      <Button asChild size="sm" variant="default">
-        <Link href="/sign-up">Registrarse</Link>
-      </Button>
-    </div>
+    </>
   );
 }

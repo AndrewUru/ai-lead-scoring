@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import HeaderAuth from "@/components/header-auth";
+import HeaderAuth from "@/components/header-auth-client";
 import Header from "@/components/header"; // ahora el header es cliente
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
